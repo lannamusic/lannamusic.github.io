@@ -160,30 +160,26 @@
            requestAnimationFrame(updateScore);
        }
    
+   function updateScore() {
+       if (
+           player &&
+           typeof player.getCurrentTime === "function"
+       ) {
+           const time = player.getCurrentTime();
+           const x = timeToX(time);
    
-       function updateScore() {
+           const parentWidth =
+               score.parentElement.getBoundingClientRect().width;
    
-           if (
-               player &&
-               typeof player.getCurrentTime === "function"
-           ) {
+           const targetX = parentWidth * 0.33;
    
-               const time = player.getCurrentTime();
+           // Aucun déplacement tant que la note n'a pas atteint 33 %
+           const translateX = Math.min(0, targetX - x);
    
-               const x = timeToX(time);
-   
-   
-               // ----------------------------------------------------
-               // Déplacement horizontal de la partition
-               // ----------------------------------------------------
-   
-               const parentWidth = score.parentElement.getBoundingClientRect().width;
-               const targetX = parentWidth * 0.25;
-               score.style.transform = `translateX(${targetX - x}px)`;
-           }
-   
-   
-           requestAnimationFrame(updateScore);
+           score.style.transform = `translateX(${translateX}px)`;
        }
+   
+       requestAnimationFrame(updateScore);
+   }
    
    })();</script></body></html>
