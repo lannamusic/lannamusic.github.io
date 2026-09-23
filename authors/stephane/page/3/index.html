@@ -114,7 +114,20 @@
     url.searchParams.set("origin", window.location.origin);
 
     youtubeIframe.src = url.toString();
+    // Fin de la lecture
+    let endTimeout = null;
 
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.ENDED) {
+        // Annule un éventuel ancien timer
+        clearTimeout(endTimeout);
+
+        // Attendre 4 secondes après la fin de la vidéo
+        endTimeout = setTimeout(() => {
+            score.style.transform = "translateX(0px)";
+        }, 4000);
+    }
+}
 
     // ============================================================
     // CHARGEMENT DE L'API YOUTUBE
@@ -128,7 +141,8 @@
         player = new YT.Player(youtubeIframe, {
 
             events: {
-                onReady: onPlayerReady
+                onReady: onPlayerReady,
+                onStateChange: onPlayerStateChange
             }
 
         });
