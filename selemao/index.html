@@ -19,4 +19,170 @@
                        this.classList.add('is-loaded');
                    }, false);
                }
-           }</script></body></html>
+           }</script><script>(() => {
+   
+       // ============================================================
+       // PARAMÈTRES DE SYNCHRONISATION
+       // ============================================================
+   
+       const TIME_1 = 2.5;
+       const X_1 = 22;
+   
+       const TIME_2 = 233;
+       const X_2 = 6880;
+   
+       // Pixels de partition par seconde
+       const PIXELS_PER_SECOND =
+           (X_2 - X_1) / (TIME_2 - TIME_1);
+   
+   
+       // ============================================================
+       // PARTITION SVG
+       // ============================================================
+   
+       // Dans ton HTML, le SVG extérieur de la partition est :
+       //
+       // <svg width="7057" height="150">
+       //
+       // Il contient lui-même deux autres SVG.
+       const score = document.querySelector(
+           'svg[width="7057"][height="150"]'
+       );
+   
+       if (!score) {
+           console.error("Partition SVG introuvable.");
+           return;
+       }
+   
+   
+       // Le SVG fait 7057 px de large alors que la fenêtre
+       // d'affichage est beaucoup plus petite.
+       //
+       // On masque donc ce qui dépasse.
+       const scoreContainer = score.parentElement;
+   
+       scoreContainer.style.overflow = "hidden";
+       scoreContainer.style.width = "100%";
+   
+   
+       // Empêche le navigateur de réserver une largeur de 7057 px
+       // pour le SVG.
+       score.style.display = "block";
+   
+   
+       // ============================================================
+       // CONVERSION TEMPS -> X
+       // ============================================================
+   
+       function timeToX(time) {
+   
+           // Interpolation linéaire entre :
+           //
+           // 2.5 s  -> 22 px
+           // 233 s  -> 6880 px
+   
+           return X_1 +
+               (time - TIME_1) * PIXELS_PER_SECOND;
+       }
+   
+   
+       // ============================================================
+       // YOUTUBE
+       // ============================================================
+   
+       // Ton HTML contient trois iframes YouTube.
+       // La troisième correspond à eOlYKeouRKk.
+       const iframes = document.querySelectorAll(
+           '.post__iframe iframe'
+       );
+   
+       const youtubeIframe = iframes[2];
+   
+       if (!youtubeIframe) {
+           console.error("Iframe YouTube introuvable.");
+           return;
+       }
+   
+   
+       // ------------------------------------------------------------
+       // Active l'API JavaScript de YouTube
+       // ------------------------------------------------------------
+   
+       const url = new URL(youtubeIframe.src, window.location.href);
+   
+       url.searchParams.set("enablejsapi", "1");
+       url.searchParams.set("origin", window.location.origin);
+   
+       youtubeIframe.src = url.toString();
+   
+   
+       // ============================================================
+       // CHARGEMENT DE L'API YOUTUBE
+       // ============================================================
+   
+       let player = null;
+   
+   
+       window.onYouTubeIframeAPIReady = function () {
+   
+           player = new YT.Player(youtubeIframe, {
+   
+               events: {
+                   onReady: onPlayerReady
+               }
+   
+           });
+       };
+   
+   
+       // Charge l'API YouTube si elle n'est pas déjà chargée.
+       if (!window.YT) {
+   
+           const tag = document.createElement("script");
+   
+           tag.src = "https://www.youtube.com/iframe_api";
+   
+           document.head.appendChild(tag);
+   
+       } else {
+   
+           // L'API était déjà disponible.
+           window.onYouTubeIframeAPIReady();
+       }
+   
+   
+       // ============================================================
+       // MISE À JOUR DE LA PARTITION
+       // ============================================================
+   
+       function onPlayerReady() {
+   
+           requestAnimationFrame(updateScore);
+       }
+   
+   
+       function updateScore() {
+   
+           if (
+               player &&
+               typeof player.getCurrentTime === "function"
+           ) {
+   
+               const time = player.getCurrentTime();
+   
+               const x = timeToX(time);
+   
+   
+               // ----------------------------------------------------
+               // Déplacement horizontal de la partition
+               // ----------------------------------------------------
+   
+               score.style.transform =
+                   `translateX(${-x}px)`;
+           }
+   
+   
+           requestAnimationFrame(updateScore);
+       }
+   
+   })();</script></body></html>
