@@ -180,8 +180,9 @@
                // Déplacement horizontal de la partition
                // ----------------------------------------------------
    
-               score.style.transform =
-                   `translateX(${-x}px)`;
+               const parentWidth = score.parentElement.getBoundingClientRect().width;
+               const targetX = parentWidth * 0.25;
+               score.style.transform = `translateX(${targetX - x}px)`;
            }
    
    
