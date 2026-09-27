@@ -1,0 +1,42 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>ocr check</title>
+<pre id="out">running…</pre>
+<script type="module">
+import { inkMask, findTable, warp } from '../image.mjs';
+import { readCells } from '../ocr.mjs';
+
+// Read by eye from the photo; ํ = the book's octave tick.
+const truth = [
+  'ซมซซ ซลซซ ลซดํล ซดรม ____ ซดรม ซลซม รดรม',
+  '____ ซดรม ซลซม รดรม รดรม รซรม รดรม _ซ_ล',
+  '__ดํซ ลซมซ __รม ซลซม __รม ซลซด _ด_ด _ซ_ล',
+  '___ดํ __ลดํ __รม รดลดํ ___ดํ __ลดํ __รม รดลดํ',
+  'ซดํลซ _มรซ ____ ดมรด',
+].map((r) => r.split(' '));
+
+const img = new Image();
+img.src = 'fixtures/noi-jaiya.jpg';
+await img.decode();
+const photo = document.createElement('canvas');
+photo.width = img.naturalWidth;
+photo.height = img.naturalHeight;
+photo.getContext('2d').drawImage(img, 0, 0);
+// Straighten first, as the app does. The table's corners in the fixture (TL, TR, BR, BL):
+const quad = [[70, 19], [1718, 25], [1768, 525], [11, 500]];
+const flat = warp(photo.getContext('2d').getImageData(0, 0, photo.width, photo.height), quad, 1800, 522);
+const canvas = document.createElement('canvas');
+canvas.width = flat.width;
+canvas.height = flat.height;
+canvas.getContext('2d').putImageData(new ImageData(flat.data, flat.width, flat.height), 0, 0);
+const table = findTable(inkMask(flat), flat.width, flat.height);
+const lines = await readCells(canvas, table, (done, total) => { window.ocrProgress = `${done}/${total}`; });
+let ok = 0, all = 0;
+const rows = truth.map((want, li) => {
+  const got = (lines[li] ?? []).map((c) => c.text);
+  want.forEach((w, ci) => { all++; if (got[ci] === w) ok++; });
+  return `got  ${got.join(' ')}\nwant ${want.join(' ')}`;
+});
+window.ocrScore = { ok, all, rows: table.rows.length - 1, cellsPerRow: table.cells.map((x) => x.length - 1) };
+document.getElementById('out').textContent = `${JSON.stringify(window.ocrScore)}\n${rows.join('\n')}`;
+</script>
