@@ -1,0 +1,32 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>render check</title>
+<pre id="out">running…</pre>
+<script type="module">
+import { renderScore } from '../render.mjs';
+import { buildTxml } from '../txml.mjs';
+import { parseCell } from '../cells.mjs';
+import { BEAT_HALF } from '../score-geometry.mjs';
+
+// เพลงน้อยใจยา, 36 measures, repeated 4 times = 144 (long-song case).
+const cells = "ซมซซ ซลซซ ลซดํล ซดรม ____ ซดรม ซลซม รดรม ____ ซดรม ซลซม รดรม รดรม รซรม รดรม _ซ_ล __ดํซ ลซมซ __รม ซลซม __รม ซลซด _ด_ด _ซ_ล ___ดํ __ลดํ __รม รดลดํ ___ดํ __ลดํ __รม รดลดํ ซดํลซ _มรซ ____ ดมรด".split(' ');
+const once = cells.map((c) => parseCell(c).beats);
+const measures = [...once, ...once, ...once, ...once];
+const { svg, geo, beats, spread } = await renderScore(buildTxml({ title: 'ทดสอบ', measures }), measures.length);
+document.body.insertAdjacentHTML('beforeend', svg);
+const root = document.querySelector('body > svg');
+const left = root.getBoundingClientRect().left;
+const bars = [...root.querySelectorAll('.barLine path')].map((p) => p.getBoundingClientRect().left - left);
+const offsets = beats.lastBeatXs.map((x, k) => bars[k] - (geo.thaiX + x - BEAT_HALF));
+const widths = bars.slice(1, -1).map((x, i) => x - bars[i]).slice(1);
+window.renderCheck = {
+  measures: measures.length,
+  westernBarlines: bars.length,
+  spread,
+  maxOffset: Math.max(...offsets.map(Math.abs)),
+  widthMin: Math.min(...widths),
+  widthMax: Math.max(...widths),
+  geo,
+};
+document.getElementById('out').textContent = JSON.stringify(window.renderCheck, null, 1);
+</script>

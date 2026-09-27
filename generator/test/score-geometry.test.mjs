@@ -35,14 +35,15 @@ test('anchors: first/last pitched beat and every 4th beat', () => {
 
 const VEROVIO = `<svg width="1000px" height="112px" version="1.1"><desc>Engraved by Verovio</desc>
 <svg class="definition-scale" color="black" viewBox="0 0 10000 1120">
+<g class="page-margin" transform="translate(500, 500)">
 <g data-id="a" data-class="barLine" class="barLine">
    <path d="M1000 540 L1000 1260" stroke-width="27" />
 </g><g data-id="b" data-class="barLine" class="barLine">
    <path d="M2500.5 540 L2500.5 1260" />
-</g></svg></svg>`;
+</g></g></svg></svg>`;
 
-test('verovioBarlines converts definition-scale units to px', () => {
-  assert.deepEqual(verovioBarlines(VEROVIO), [100, 250.05]);
+test('verovioBarlines converts definition-scale units to px, including the page margin', () => {
+  assert.deepEqual(verovioBarlines(VEROVIO), [150, 300.05]);
   assert.deepEqual(verovioSize(VEROVIO), { width: 1000, height: 112 });
 });
 

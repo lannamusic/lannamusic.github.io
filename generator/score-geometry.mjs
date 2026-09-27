@@ -53,7 +53,9 @@ export function verovioSize(svg) {
 export function verovioBarlines(svg) {
   const width = svgAttr(svg, 'width');
   const units = parseFloat(/class="definition-scale"[^>]*viewBox="0 0 ([\d.]+)/.exec(svg)[1]);
-  return [...svg.matchAll(/class="barLine">\s*<path d="M([\d.]+) /g)].map((m) => (parseFloat(m[1]) * width) / units);
+  // The music sits inside Verovio's page margin, translated in the same units.
+  const margin = parseFloat(/class="page-margin" transform="translate\(([\d.]+)/.exec(svg)?.[1] ?? 0);
+  return [...svg.matchAll(/class="barLine">\s*<path d="M([\d.]+) /g)].map((m) => ((parseFloat(m[1]) + margin) * width) / units);
 }
 
 /** Spread of inner measure widths, as a fraction of the widest (the first and last measures hold the clef and the final bar). */
