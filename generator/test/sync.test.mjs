@@ -88,3 +88,12 @@ test('starts at once when the API is already loaded', () => {
   assert.equal(p.head.children.length, 0);
   assert.equal(p.players.length, 1);
 });
+
+test('a score narrower than the view stays at the left edge', () => {
+  const short = { id: 'Y5-9IWM8X5o', sync: [{ time: 0, x: 20 }, { time: 10, x: 120 }], endX: 130, width: 140 };
+  const p = page([short]);
+  p.apiReady();
+  p.at(short.id, 5);
+  assert.equal(p.sheet(0), 0);
+  assert.equal(p.marker(0), 70);
+});

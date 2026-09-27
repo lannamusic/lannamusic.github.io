@@ -2,9 +2,66 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>สร้างโน้ตเพลง</title>
-<script type="module" src="check.mjs"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&family=Taviraj:wght@500;600&display=swap">
+<link rel="stylesheet" href="generator.css">
+<script type="module" src="app.mjs"></script>
 </head>
-<body><p id="out">…</p></body>
+<body>
+<header class="masthead">
+  <label class="title">เพลง<input id="title" autocomplete="off" placeholder="ชื่อเพลง"></label>
+  <ol class="steps" aria-label="ขั้นตอน"><li>ภาพ</li><li>โน้ต</li><li>ผลลัพธ์</li></ol>
+</header>
+<main class="work">
+  <section class="photo" aria-labelledby="h-photo">
+    <h2 id="h-photo">ภาพ</h2>
+    <div id="drop" class="drop">
+      <p id="drop-empty">วางภาพโน้ตที่นี่ หรือ <label class="pick">เลือกไฟล์<input id="file" type="file" accept="image/*"></label></p>
+      <div id="stage" class="stage" hidden>
+        <canvas id="photo"></canvas>
+        <button type="button" class="handle" aria-label="มุมซ้ายบนของตาราง"></button>
+        <button type="button" class="handle" aria-label="มุมขวาบนของตาราง"></button>
+        <button type="button" class="handle" aria-label="มุมขวาล่างของตาราง"></button>
+        <button type="button" class="handle" aria-label="มุมซ้ายล่างของตาราง"></button>
+      </div>
+    </div>
+    <p class="help">ลากจุดสีแดงทั้งสี่ไปที่มุมของตารางเพลงเดียว ใช้ปุ่มลูกศรขยับทีละนิดได้</p>
+    <button id="read" type="button" class="primary" disabled>อ่านโน้ต</button>
+    <p id="read-status" class="status" role="status"></p>
+  </section>
+
+  <section class="notes" aria-labelledby="h-notes">
+    <h2 id="h-notes">โน้ต</h2>
+    <p class="help">พิมพ์ห้องละ 4 จังหวะ เช่น <kbd>ซมซซ</kbd> ใช้ <kbd>_</kbd> แทนจังหวะว่าง เติม <kbd>ํ</kbd> หรือ <kbd>'</kbd> หลังโน้ตเสียงสูง และ <kbd>ฺ</kbd> หรือ <kbd>,</kbd> หลังโน้ตเสียงต่ำ</p>
+    <div class="grid-wrap"><table id="grid" class="grid"><tbody></tbody></table></div>
+    <p id="grid-errors" class="status error" role="status"></p>
+    <button id="add-line" type="button">เพิ่มบรรทัด</button>
+  </section>
+
+  <section class="output" aria-labelledby="h-output">
+    <h2 id="h-output">ผลลัพธ์</h2>
+    <div class="settings">
+      <label>รอบ<input id="times" type="number" min="1" max="20" value="1"></label>
+      <label>ระดับเสียง<select id="tuning"></select></label>
+    </div>
+    <div id="preview" class="preview"></div>
+    <label class="scrub">ตำแหน่ง<input id="scrub" type="range" min="0" max="1000" value="0" disabled></label>
+    <fieldset class="sync">
+      <legend>วิดีโอ</legend>
+      <label>ลิงก์ YouTube<input id="video" inputmode="url" autocomplete="off"></label>
+      <label>เวลาโน้ตตัวแรก<input id="t-first" placeholder="0:02.5" autocomplete="off"></label>
+      <label>เวลาโน้ตตัวสุดท้าย<input id="t-last" placeholder="3:53" autocomplete="off"></label>
+    </fieldset>
+    <p id="out-status" class="status" role="status"></p>
+    <div class="actions">
+      <button id="copy" type="button" class="primary" disabled>คัดลอกไปวางใน Publii</button>
+      <button id="download" type="button" disabled>ดาวน์โหลด .txml</button>
+    </div>
+  </section>
+</main>
+</body>
 </html>

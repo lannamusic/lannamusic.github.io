@@ -45,8 +45,9 @@
     // Le repère s'arrête juste avant la fin de la partition
     const x = Math.min(s.a.x + (s.player.getCurrentTime() - s.a.time) * s.speed, s.endX - MARKER_WIDTH / 2);
     const view = s.block.getBoundingClientRect().width;
-    // Pas de défilement avant 33 %, ni au-delà de la fin
-    const shift = Math.max(view - s.width, Math.min(0, view * TARGET - x));
+    // Pas de défilement avant 33 %, ni au-delà de la fin (ni vers la droite
+    // quand la partition est plus étroite que l'écran)
+    const shift = Math.max(Math.min(0, view - s.width), Math.min(0, view * TARGET - x));
     s.svg.style.transform = `translateX(${shift}px)`;
     s.marker.style.transform = `translateX(${x + shift}px)`;
   }
