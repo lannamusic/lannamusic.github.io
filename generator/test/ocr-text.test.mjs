@@ -34,6 +34,7 @@ test('missing rests are filled by position, and the cell is marked unsure', () =
 test('low confidence marks the cell unsure', () => {
   assert.equal(placeInSlots([s('ซ', 2, 10, 40), s('ม', 12, 20), s('ซ', 22, 30), s('ซ', 32, 40)], 40).unsure, true);
 });
-test('an empty cell becomes four rests, unsure', () => {
-  assert.deepEqual(placeInSlots([], 40), { text: '____', unsure: true });
+test('a cell with nothing recognised stays empty, so it is not a measure', () => {
+  assert.deepEqual(placeInSlots([], 40), { text: '', unsure: true });
+  assert.deepEqual(placeInSlots([{ text: 'x', x0: 2, x1: 10, confidence: 90 }], 40), { text: '', unsure: true });
 });

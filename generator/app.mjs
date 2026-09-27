@@ -84,7 +84,7 @@ $('read').addEventListener('click', async () => {
   const outH = Math.max(1, Math.round((outW * (dist(tl, bl) + dist(tr, br))) / (dist(tl, tr) + dist(bl, br))));
   const flat = warp(state.image, state.quad, outW, outH);
   const table = findTable(inkMask(flat), outW, outH);
-  if (table.rows.length < 2 || table.cells.every((xs) => xs.length < 2)) {
+  if (!table.ruled) {
     return status('read-status', 'หาตารางโน้ตไม่พบ ลองขยับมุมทั้งสี่ให้ตรงขอบตาราง', true);
   }
   const rectified = document.createElement('canvas');
@@ -172,6 +172,9 @@ let renderTimer = null;
 let renderToken = 0;
 
 function changed() {
+  // The current preview no longer matches the grid: no copying it until the new render lands.
+  $('copy').disabled = true;
+  $('download').disabled = true;
   const { measures, errors } = parseGrid(state.lines);
   $('grid').querySelectorAll('td.invalid').forEach((td) => td.classList.remove('invalid'));
   for (const err of errors) cellInput(err.line, err.cell)?.parentElement.classList.add('invalid');

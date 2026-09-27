@@ -68,3 +68,12 @@ test('findTable adds the image edge when a rule is missing', () => {
   const t = findTable(m, w, h);
   assert.deepEqual(t.rows, [0, 50, 100]);
 });
+
+test('findTable says whether it found real rules, not just the image edges', () => {
+  const { m, w, h } = tableMask();
+  assert.equal(findTable(m, w, h).ruled, true);
+  assert.equal(findTable(new Uint8Array(300 * 100), 300, 100).ruled, false);
+  const onlyLines = new Uint8Array(300 * 100);
+  for (let x = 0; x < 300; x++) onlyLines[50 * 300 + x] = 1; // one horizontal rule, no cell walls
+  assert.equal(findTable(onlyLines, 300, 100).ruled, false);
+});

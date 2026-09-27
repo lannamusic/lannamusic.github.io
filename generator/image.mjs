@@ -113,8 +113,10 @@ export function findTable(mask, w, h) {
     for (let x = 0; x < w; x++) s += mask[y * w + x];
     return s;
   });
-  const rows = withEdges(ruleCentres(rowProfile, w * 0.45, h / 20), h);
+  const found = ruleCentres(rowProfile, w * 0.45, h / 20);
+  const rows = withEdges(found, h);
   const cells = [];
+  let walls = 0; // most cell walls found in one row, image edges excluded
   for (let r = 0; r < rows.length - 1; r++) {
     const y0 = Math.round(rows[r]);
     const y1 = Math.round(rows[r + 1]);
@@ -123,12 +125,16 @@ export function findTable(mask, w, h) {
       for (let y = y0; y < y1; y++) s += mask[y * w + x];
       return s;
     });
-    cells.push(withEdges(ruleCentres(colProfile, (y1 - y0) * 0.6, w / 40), w));
+    const xs = ruleCentres(colProfile, (y1 - y0) * 0.6, w / 40);
+    walls = Math.max(walls, xs.length);
+    cells.push(withEdges(xs, w));
   }
   // A short last row is often followed by a note in the margin: drop trailing
   // "cells" much wider than a normal measure.
   const widths = cells.flatMap((xs) => xs.slice(1).map((x, i) => x - xs[i])).sort((a, b) => a - b);
   const median = widths[Math.floor(widths.length / 2)];
   for (const xs of cells) while (xs.length > 2 && xs.at(-1) - xs.at(-2) > 1.6 * median) xs.pop();
-  return { rows, cells };
+  // "ruled": the photo really shows a table (a row rule and two cell walls),
+  // not just the image edges withEdges() adds.
+  return { rows, cells, ruled: found.length > 0 && walls >= 2 };
 }

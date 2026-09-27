@@ -5,8 +5,13 @@
   const MARKER_WIDTH = 40;
   const TARGET = 0.33; // le repère se fixe à 33 % de la largeur
 
-  const scores = [];
+  // Chaque partition collée apporte sa copie de ce script : une seule liste
+  // et une seule boucle pour toute la page.
+  const shared = (window.__lannaScore = window.__lannaScore || { scores: [], running: false });
+
   for (const block of document.querySelectorAll('.lanna-score')) {
+    if (block.dataset.lannaReady) continue; // déjà pris en charge par une copie précédente
+    block.dataset.lannaReady = '1';
     const id = block.dataset.youtubeId;
     const svg = block.querySelector('svg');
     const iframe = [...document.querySelectorAll('iframe')].find((f) => f.src.includes('/embed/' + id));
@@ -37,9 +42,16 @@
       url.searchParams.set('origin', location.origin);
       iframe.src = url.toString();
     }
-    scores.push({ block, svg, marker, iframe, a, speed: (b.x - a.x) / (b.time - a.time), endX: +block.dataset.endX, width: +svg.getAttribute('width'), player: null });
+    shared.scores.push({ block, svg, marker, iframe, a, speed: (b.x - a.x) / (b.time - a.time), endX: +block.dataset.endX, width: +svg.getAttribute('width'), player: null });
   }
-  if (!scores.length) return;
+
+  // Charge l'API YouTube une seule fois. On n'utilise pas
+  // onYouTubeIframeAPIReady : d'autres scripts de la page le remplacent.
+  if (!(window.YT && window.YT.Player) && !document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }
 
   function update(s) {
     // Le repère s'arrête juste avant la fin de la partition
@@ -53,21 +65,16 @@
   }
 
   function loop() {
-    for (const s of scores) if (s.player && typeof s.player.getCurrentTime === 'function') update(s);
+    const ready = window.YT && window.YT.loaded && window.YT.Player;
+    for (const s of shared.scores) {
+      if (!s.player && ready) s.player = new window.YT.Player(s.iframe, {});
+      if (s.player && typeof s.player.getCurrentTime === 'function') update(s);
+    }
     requestAnimationFrame(loop);
   }
 
-  const previous = window.onYouTubeIframeAPIReady;
-  window.onYouTubeIframeAPIReady = () => {
-    if (typeof previous === 'function') previous();
-    for (const s of scores) s.player = new window.YT.Player(s.iframe, {});
+  if (!shared.running) {
+    shared.running = true;
     requestAnimationFrame(loop);
-  };
-
-  if (window.YT && window.YT.Player) window.onYouTubeIframeAPIReady();
-  else {
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
   }
 })();

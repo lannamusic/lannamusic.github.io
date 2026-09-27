@@ -34,6 +34,9 @@ export function placeInSlots(symbols, cellWidth) {
     }
     tokens.push({ t, cx: (sym.x0 + sym.x1) / 2, confidence: sym.confidence });
   }
+  // Nothing read: leave the cell empty, so a blank ruled cell is not taken
+  // for a measure of rests (parseGrid drops trailing blanks, flags inner ones).
+  if (!tokens.length) return { text: '', unsure: true };
   const lowConfidence = tokens.some((t) => t.confidence < LOW_CONFIDENCE);
   if (tokens.length === 4) return { text: tokens.map((t) => t.t).join(''), unsure: lowConfidence };
   // Otherwise place notes by position; empty slots are rests.
