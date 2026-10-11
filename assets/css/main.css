@@ -211,27 +211,48 @@ pre code {
   font-size: inherit;
   padding: 0;
 }
-
+/* Override table */
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
-  vertical-align: top;
-  text-align: left;
-  white-space: nowrap;
+    border-collapse: collapse;
+    border: 0;
+    display: block;
+    font-family: 'Sarabun';
+    font-style: normal;
+    font-weight: 500;
+    max-width: 100%;
+    overflow-x: auto;
+    vertical-align: top;
+    text-align: left;
+    white-space: nowrap;
+	table-layout: fixed;
 }
 table th {
-  border-bottom: 2px solid var(--light);
-  padding: 0.75rem 1.25rem;
-}
-table tr:nth-child(2n) {
-  background: var(--lighter);
+    border-bottom: 2px solid var(--hero-bg);
+    padding: 0.75rem 1.25rem;
 }
 table td {
-  padding: 0.75rem 1.25rem;
+    border-left: 0;
+	border-right: 0;
+	padding: 0;
+	overflow: hidden;
+	text-align: center;
+    vertical-align: middle;
+	border-top: 1px solid var(--hero-bg);
+	border-bottom: 1px solid var(--hero-bg);
+	width: 2%;
 }
+table td:nth-child(4n) {
+	border-right: 1px solid var(--hero-bg);
+	padding-right: 0.3em;
+}
+table td:nth-child(4n+1) {
+	border-left: 1px solid var(--hero-bg);
+	padding-left: 0.3em;
+}
+table td:empty {
+	border: 0;
+}
+/* End override table */
 
 figcaption {
   clear: both;
@@ -866,7 +887,7 @@ textarea {
   }
 }
 .main__right > div {
-  max-width: var(--entry-width);
+  max-width: 100%;  /* Override */
 }
 @media all and (min-width: 37.5em) and (max-width: 56.1875em) {
   .main__right > div {
@@ -1100,20 +1121,32 @@ textarea {
   text-align: center;
 }
 .post__video, .post__iframe {
-  position: relative;
   display: block;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   overflow: hidden;
   padding: 0;
+  position: relative;
   width: 100%;
 }
+/* Override for YouTube iframes */
+.yt-embed {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+/* End override YouTube */
 .post__video::before, .post__iframe::before {
   display: block;
   content: "";
   padding-top: var(--embed-aspect-ratio);
 }
-.post__video iframe, .post__video video, .post__iframe iframe, .post__iframe video {
+.post__video iframe[height*="%"][width*="%"],
+.post__video video[height*="%"][width*="%"],
+.post__video iframe[height]:not([height*="%"])[width]:not([width*="%"]),
+.post__video video[height]:not([height*="%"])[width]:not([width*="%"]), .post__iframe iframe[height*="%"][width*="%"],
+.post__iframe video[height*="%"][width*="%"],
+.post__iframe iframe[height]:not([height*="%"])[width]:not([width*="%"]),
+.post__iframe video[height]:not([height*="%"])[width]:not([width*="%"]) {
   border: none;
   height: 100%;
   left: 0;
@@ -1121,6 +1154,9 @@ textarea {
   top: 0;
   bottom: 0;
   width: 100%;
+}
+.post__video:has(iframe:not([height]))::before, .post__video:has(iframe:not([width]))::before, .post__video:has(video:not([height]))::before, .post__video:has(video:not([width]))::before, .post__iframe:has(iframe:not([height]))::before, .post__iframe:has(iframe:not([width]))::before, .post__iframe:has(video:not([height]))::before, .post__iframe:has(video:not([width]))::before {
+  display: none;
 }
 .post__toc ul {
   counter-reset: item;
@@ -1536,27 +1572,4 @@ textarea {
   opacity: 1;
   -webkit-transform: translate(-50%, 0);
           transform: translate(-50%, 0);
-}
-
-.pswp--dark .pswp__bg {
-  background: var(--black);
-}
-.pswp--dark .pswp__button,
-.pswp--dark .pswp__button--arrow--left:before,
-.pswp--dark .pswp__button--arrow--right:before {
-  background-image: url(../svg/gallery-icons-light.svg);
-}
-.pswp--light .pswp__bg {
-  background: var(--white);
-}
-.pswp--light .pswp__counter {
-  color: var(--dark);
-}
-.pswp--light .pswp__caption__center {
-  color: var(--text-color);
-}
-.pswp--light .pswp__button,
-.pswp--light .pswp__button--arrow--left:before,
-.pswp--light .pswp__button--arrow--right:before {
-  background-image: url(../svg/gallery-icons-dark.svg);
 }
