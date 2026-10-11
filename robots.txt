@@ -1,2 +1,3 @@
 User-agent: *
 Disallow:
+Sitemap: https://lannamusic.github.io/sitemap.xml

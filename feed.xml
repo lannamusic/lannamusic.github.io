@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+    <title>Lanna Music</title>
+    <link href="https://lannamusic.github.io/feed.xml" rel="self" />
+    <link href="https://lannamusic.github.io" />
+    <updated>2026-01-25T17:55:44+07:00</updated>
+    <author>
+        <name>Stéphane</name>
+    </author>
+    <id>https://lannamusic.github.io</id>
+
+    <entry>
+        <title>เพลงละม้าย</title>
+        <author>
+            <name>Stéphane</name>
+        </author>
+        <link href="https://lannamusic.github.io/lamai/"/>
+        <id>https://lannamusic.github.io/lamai/</id>
+
+        <updated>2025-08-10T22:12:16+07:00</updated>
+            <summary></summary>
+        <content></content>
+    </entry>
+    <entry>
+        <title>เพลงจะปุ</title>
+        <author>
+            <name>Stéphane</name>
+        </author>
+        <link href="https://lannamusic.github.io/japu/"/>
+        <id>https://lannamusic.github.io/japu/</id>
+
+        <updated>2025-02-21T16:47:39+07:00</updated>
+            <summary></summary>
+        <content></content>
+    </entry>
+    <entry>
+        <title>เพลงอื่อ</title>
+        <author>
+            <name>Stéphane</name>
+        </author>
+        <link href="https://lannamusic.github.io/euu/"/>
+        <id>https://lannamusic.github.io/euu/</id>
+
+        <updated>2024-10-14T16:23:22+07:00</updated>
+            <summary></summary>
+        <content></content>
+    </entry>
+    <entry>
+        <title>เพลงพม่ารำขวาน</title>
+        <author>
+            <name>Stéphane</name>
+        </author>
+        <link href="https://lannamusic.github.io/phama-ram-khwan/"/>
+        <id>https://lannamusic.github.io/phama-ram-khwan/</id>
+            <category term="รำ"/>
+
+        <updated>2024-09-16T17:02:27+07:00</updated>
+            <summary></summary>
+        <content></content>
+    </entry>
+    <entry>
+        <title>เพลงพม่าแทงกบ</title>
+        <author>
+            <name>Stéphane</name>
+        </author>
+        <link href="https://lannamusic.github.io/phama-thaeng-gop/"/>
+        <id>https://lannamusic.github.io/phama-thaeng-gop/</id>
+
+        <updated>2024-07-20T17:39:39+07:00</updated>
+            <summary></summary>
+        <content></content>
+    </entry>
+    <entry>
+        <title>เพลงซอพม่า</title>
+        <author>
+            <name>Stéphane</name>
+        </author>
+        <link href="https://lannamusic.github.io/so-phama/"/>
+        <id>https://lannamusic.github.io/so-phama/</id>
+
+        <updated>2024-06-22T18:08:44+07:00</updated>
+            <summary></summary>
+        <content></content>
+    </entry>
+    <entry>
+        <title>เพลงก่ำเบ้อ</title>
+        <author>
+            <name>Stéphane</name>
+        </author>
+        <link href="https://lannamusic.github.io/gamboe/"/>
+        <id>https://lannamusic.github.io/gamboe/</id>
+
+        <updated>2024-01-27T18:15:35+07:00</updated>
+            <summary></summary>
+        <content></content>
+    </entry>
+    <entry>
+        <title>เพลงกล่อมนางนอน</title>
+        <author>
+            <name>Stéphane</name>
+        </author>
+        <link href="https://lannamusic.github.io/glom-nang-non/"/>
+        <id>https://lannamusic.github.io/glom-nang-non/</id>
+
+        <updated>2023-11-05T20:24:29+07:00</updated>
+            <summary></summary>
+        <content></content>
+    </entry>
+    <entry>
+        <title>เพลงฟ้อนวี</title>
+        <author>
+            <name>Stéphane</name>
+        </author>
+        <link href="https://lannamusic.github.io/fon-wi/"/>
+        <id>https://lannamusic.github.io/fon-wi/</id>
+
+        <updated>2023-08-26T17:55:53+07:00</updated>
+            <summary></summary>
+        <content></content>
+    </entry>
+    <entry>
+        <title>เพลงซอแว่นแก้ว </title>
+        <author>
+            <name>Stéphane</name>
+        </author>
+        <link href="https://lannamusic.github.io/so-waenkaeo/"/>
+        <id>https://lannamusic.github.io/so-waenkaeo/</id>
+
+        <updated>2023-06-01T16:44:10+07:00</updated>
+            <summary></summary>
+        <content></content>
+    </entry>
+</feed>
